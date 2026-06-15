@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Infinite Mystery of Prime Numbers — Mohamed Ezer Bouzouraa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:        #1a1714;
+    --ink-mid:    #3d3830;
+    --ink-light:  #6e6559;
+    --ink-faint:  #b0a898;
+    --paper:      #faf8f4;
+    --paper-warm: #f2ede4;
+    --paper-deep: #e8e0d2;
+    --gold:       #a07830;
+    --gold-light: #c8a050;
+    --gold-pale:  #f5edd8;
+    --rule:       rgba(100, 85, 60, 0.18);
+    --serif:      'Playfair Display', Georgia, 'Times New Roman', serif;
+    --body:       'EB Garamond', Georgia, serif;
+    --mono:       'JetBrains Mono', 'Courier New', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 18px;
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── MASTHEAD ─── */
+  .masthead {
+    border-bottom: 1px solid var(--rule);
+    padding: 1.2rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: var(--paper);
+    z-index: 100;
+    backdrop-filter: blur(4px);
+  }
+  .masthead-logo {
+    font-family: var(--serif);
+    font-size: 14px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+  }
+  .masthead-tag {
+    font-family: var(--body);
+    font-size: 13px;
+    font-style: italic;
+    color: var(--ink-faint);
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 5rem 2rem 3.5rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .hero-eyebrow {
+    font-family: var(--body);
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 32px;
+    height: 1px;
+    background: var(--gold);
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(38px, 6vw, 62px);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    margin-bottom: 1.4rem;
+  }
+  .hero h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--ink-mid);
+  }
+  .hero-lede {
+    font-family: var(--body);
+    font-size: 21px;
+    font-style: italic;
+    color: var(--ink-mid);
+    line-height: 1.55;
+    max-width: 620px;
+    margin-bottom: 2.2rem;
+  }
+  .byline {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+  }
+  .byline-avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--gold-pale);
+    border: 1px solid var(--gold-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--serif);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gold);
+    flex-shrink: 0;
+  }
+  .byline-meta {
+    font-family: var(--body);
+    font-size: 14px;
+    color: var(--ink-light);
+  }
+  .byline-name {
+    display: block;
+    font-family: var(--body);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+
+  /* ─── CONTENT LAYOUT ─── */
+  .content-wrap {
+    display: grid;
+    grid-template-columns: 1fr min(640px, 100%) 1fr;
+    padding: 0 1rem;
+  }
+  .content-wrap > * { grid-column: 2; }
+
+  article {
+    padding: 3.5rem 0 5rem;
+  }
+
+  /* ─── TYPOGRAPHY ─── */
+  .drop-cap::first-letter {
+    font-family: var(--serif);
+    font-size: 5em;
+    font-weight: 700;
+    float: left;
+    line-height: 0.76;
+    margin: 0.06em 0.12em 0 0;
+    color: var(--gold);
+  }
+
+  p { margin-bottom: 1.5rem; text-align: justify; hyphens: auto; }
+
+  h2 {
+    font-family: var(--serif);
+    font-size: 30px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--ink);
+    margin: 3.5rem 0 1.2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 500;
+    font-style: italic;
+    color: var(--ink-mid);
+    margin: 2.5rem 0 0.8rem;
+  }
+
+  em { font-style: italic; }
+  strong { font-weight: 500; }
+
+  /* ─── FORMULA BLOCKS ─── */
+  .formula-block {
+    background: var(--paper-warm);
+    border: 1px solid var(--paper-deep);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 6px 6px 0;
+    padding: 1.4rem 1.8rem;
+    margin: 2rem 0;
+    font-family: var(--mono);
+    font-size: 15px;
+    color: var(--ink);
+    overflow-x: auto;
+  }
+  .formula-block .formula-label {
+    font-family: var(--body);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 0.6rem;
+  }
+  .formula-block .formula-main {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--ink);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  .formula-block .formula-note {
+    font-family: var(--body);
+    font-size: 14px;
+    font-style: italic;
+    color: var(--ink-light);
+    display: block;
+    margin-top: 0.5rem;
+  }
+
+  /* ─── THEOREM CARDS ─── */
+  .theorem-card {
+    background: var(--paper);
+    border: 1px solid var(--paper-deep);
+    border-radius: 8px;
+    padding: 1.6rem 1.8rem;
+    margin: 2.2rem 0;
+    position: relative;
+  }
+  .theorem-card::before {
+    content: attr(data-label);
+    position: absolute;
+    top: -11px;
+    left: 20px;
+    background: var(--paper);
+    padding: 0 10px;
+    font-family: var(--body);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+  }
+  .theorem-card .th-name {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.6rem;
+    display: block;
+  }
+  .theorem-card .th-formula {
+    font-family: var(--mono);
+    font-size: 15px;
+    background: var(--paper-warm);
+    border-radius: 4px;
+    padding: 0.6rem 1rem;
+    margin: 0.8rem 0;
+    display: block;
+    color: var(--ink);
+    overflow-x: auto;
+  }
+  .theorem-card p {
+    font-size: 16px;
+    color: var(--ink-mid);
+    margin-bottom: 0;
+  }
+
+  /* ─── PULL QUOTE ─── */
+  .pull-quote {
+    margin: 2.8rem -2rem;
+    padding: 2rem 2rem 2rem 2.8rem;
+    border-left: 4px solid var(--gold);
+    background: var(--gold-pale);
+  }
+  .pull-quote p {
+    font-family: var(--serif);
+    font-size: 24px;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.45;
+    margin: 0;
+    text-align: left;
+  }
+  .pull-quote cite {
+    display: block;
+    margin-top: 1rem;
+    font-family: var(--body);
+    font-size: 13px;
+    font-style: normal;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  /* ─── FERMAT TABLE ─── */
+  .fermat-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.8rem 0;
+    font-size: 15px;
+  }
+  .fermat-table thead tr {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .fermat-table th {
+    font-family: var(--body);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.7rem 1rem;
+    text-align: left;
+    font-weight: 500;
+  }
+  .fermat-table td {
+    font-family: var(--mono);
+    font-size: 13px;
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--paper-deep);
+    color: var(--ink-mid);
+    vertical-align: top;
+  }
+  .fermat-table td:first-child {
+    font-weight: 500;
+    color: var(--ink);
+    font-family: var(--body);
+  }
+  .fermat-table tr:hover td { background: var(--paper-warm); }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-family: var(--body);
+    font-size: 12px;
+    font-style: normal;
+    letter-spacing: 0.05em;
+  }
+  .badge-prime   { background: #d4edda; color: #1a5e2c; }
+  .badge-composite { background: #f8d7da; color: #721c24; }
+  .badge-unknown { background: #e9ecef; color: #495057; }
+
+  /* ─── SIDEBAR BOX ─── */
+  .sidebar-box {
+    float: right;
+    width: 240px;
+    margin: 0.5rem 0 1.5rem 2rem;
+    background: var(--paper-warm);
+    border: 1px solid var(--paper-deep);
+    border-radius: 6px;
+    padding: 1rem 1.2rem;
+    font-size: 14px;
+  }
+  .sidebar-box .sb-title {
+    font-family: var(--body);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.7rem;
+    display: block;
+  }
+  .sidebar-box ul {
+    list-style: none;
+    padding: 0;
+  }
+  .sidebar-box li {
+    border-bottom: 1px solid var(--paper-deep);
+    padding: 0.4rem 0;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-mid);
+  }
+  .sidebar-box li:last-child { border-bottom: none; }
+
+  /* ─── SECTION DIVIDER ─── */
+  .section-ornament {
+    text-align: center;
+    color: var(--gold);
+    font-size: 20px;
+    margin: 3rem 0;
+    letter-spacing: 0.6em;
+  }
+
+  /* ─── FOOTNOTE ─── */
+  footer {
+    border-top: 1px solid var(--rule);
+    padding: 2rem 0 0;
+    margin-top: 1rem;
+    font-family: var(--body);
+    font-size: 14px;
+    color: var(--ink-light);
+    line-height: 1.7;
+  }
+  footer strong { color: var(--ink-mid); }
+
+  /* ─── PRINT / MOBILE ─── */
+  @media (max-width: 680px) {
+    .hero { padding: 3rem 1.5rem 2.5rem; }
+    .pull-quote { margin: 2.5rem 0; }
+    .sidebar-box { float: none; width: 100%; margin: 1rem 0; }
+    h2 { font-size: 24px; }
+  }
+  @media print {
+    .masthead { position: static; }
+    .pull-quote { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <span class="masthead-logo">Bouzouraa · Journal</span>
+  <span class="masthead-tag">Mathematics &amp; Number Theory</span>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Mathematics &nbsp;·&nbsp; Number Theory &nbsp;·&nbsp; History of Ideas</div>
+  <h1>The <em>infinite mystery</em> of prime numbers</h1>
+  <p class="hero-lede">From Fermat's beautiful conjecture — shattered by Euler — to Wilson's elegant divisibility criterion and the deepest unsolved problems in mathematics.</p>
+  <div class="byline">
+    <div class="byline-avatar">MEB</div>
+    <div class="byline-meta">
+      <span class="byline-name">Mohamed Ezer Bouzouraa</span>
+      Software &amp; AI Engineer &nbsp;·&nbsp;
+    </div>
+  </div>
+</div>
+
+<!-- ARTICLE -->
+<div class="content-wrap">
+<article>
+
+<p class="drop-cap">There is something quietly astonishing about the fact that buried within the ordinary sequence of counting numbers there exists a hidden skeleton — a sparse, irregular, yet perfectly lawful set of values from which every other integer is built. These are the primes: numbers divisible by nothing but one and themselves. They are, in a very precise sense, the atoms of arithmetic. And for centuries, mathematicians have sought formulas that generate, detect, or predict them — often with spectacular failure, and occasionally with profound success.</p>
+
+<p>The story of prime-generating formulas is not a story of steady progress. It is a story of beautiful ideas that collapse under examination, of conjectures that endure for decades before a single counterexample destroys them, and of theorems so elegant they seem too good to be true — yet are rigorously true. Let us trace that story from its most celebrated ruins to its most durable monuments.</p>
+
+<!-- ═══════════════════════════════════ -->
+<h2>Fermat's conjecture and Euler's refutation</h2>
+
+<p>Pierre de Fermat — the seventeenth-century lawyer and amateur mathematician who arguably did more for number theory than any professional of his age — noticed a striking pattern in 1640. Consider the sequence of numbers obtained by raising 2 to a power that is itself a power of 2, and adding one:</p>
+
+<div class="formula-block">
+  <span class="formula-label">Fermat Numbers</span>
+  <span class="formula-main">F<sub>n</sub> = 2<sup>2<sup>n</sup></sup> + 1</span>
+  <span class="formula-note">For n = 0, 1, 2, 3, 4, … producing F₀ = 3, F₁ = 5, F₂ = 17, F₃ = 257, F₄ = 65537</span>
+</div>
+
+<p>Each of these — 3, 5, 17, 257, 65537 — is prime. Fermat examined the first five values and, finding all of them prime, conjectured that <em>every</em> number of this form is prime. The conjecture was bold, the evidence compelling, and the pattern seductive.</p>
+
+<div class="pull-quote">
+  <p>"Fermat had the rare gift of formulating conjectures that were almost right — which is a more dangerous talent than being mostly wrong."</p>
+  <cite>— Mathematical folklore</cite>
+</div>
+
+<p>Then came Leonhard Euler. In 1732, nearly a century after Fermat's conjecture, the most prolific mathematician in history turned his attention to the next Fermat number: <strong>F₅ = 2<sup>32</sup> + 1 = 4,294,967,297</strong>. Euler discovered — through a combination of theoretical insight and systematic calculation — that this number factors as:</p>
+
+<div class="formula-block">
+  <span class="formula-label">Euler's Refutation (1732)</span>
+  <span class="formula-main">F₅ = 4,294,967,297 = 641 × 6,700,417</span>
+  <span class="formula-note">Euler proved 641 | F₅ by observing that 641 = 5⁴ + 2⁴ = 5 × 2⁷ + 1, then using modular arithmetic to show F₅ ≡ 0 (mod 641)</span>
+</div>
+
+<p>The conjecture was dead. What made Euler's proof so elegant was not brute computation but a theoretical argument. He showed that any prime factor of F<sub>n</sub> (for n ≥ 2) must be of the form k · 2<sup>n+2</sup> + 1 for some integer k — which dramatically restricts the candidates and explains why 641 works.</p>
+
+<h3>The state of Fermat numbers today</h3>
+
+<div class="sidebar-box">
+  <span class="sb-title">Fermat number sizes</span>
+  <ul>
+    <li>F₀ = 3 (1 digit)</li>
+    <li>F₁ = 5 (1 digit)</li>
+    <li>F₂ = 17 (2 digits)</li>
+    <li>F₃ = 257 (3 digits)</li>
+    <li>F₄ = 65,537 (5 digits)</li>
+    <li>F₅ ≈ 4.3 × 10⁹ (10 digits)</li>
+    <li>F₆ ≈ 1.8 × 10¹⁹ (20 digits)</li>
+    <li>F₃₃ has 2.5 billion digits</li>
+  </ul>
+</div>
+
+<p>In the centuries since Euler, mathematicians have factored or proved composite every Fermat number they have fully investigated — and yet no new Fermat prime has ever been found beyond F₄ = 65,537. As of today, Fermat numbers F₅ through F₃₂ are all known to be composite. Beyond that, most are so astronomically large that even factoring them partially is a significant computational achievement.</p>
+
+<table class="fermat-table">
+  <thead>
+    <tr>
+      <th>n</th>
+      <th>F<sub>n</sub></th>
+      <th>Value / Factorisation</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>0</td><td>F₀</td><td>3</td><td><span class="badge badge-prime">Prime</span></td></tr>
+    <tr><td>1</td><td>F₁</td><td>5</td><td><span class="badge badge-prime">Prime</span></td></tr>
+    <tr><td>2</td><td>F₂</td><td>17</td><td><span class="badge badge-prime">Prime</span></td></tr>
+    <tr><td>3</td><td>F₃</td><td>257</td><td><span class="badge badge-prime">Prime</span></td></tr>
+    <tr><td>4</td><td>F₄</td><td>65,537</td><td><span class="badge badge-prime">Prime</span></td></tr>
+    <tr><td>5</td><td>F₅</td><td>641 × 6,700,417</td><td><span class="badge badge-composite">Composite</span></td></tr>
+    <tr><td>6</td><td>F₆</td><td>274,177 × 67,280,421,310,721</td><td><span class="badge badge-composite">Composite</span></td></tr>
+    <tr><td>7</td><td>F₇</td><td>59,649,589,127,497,217 × …</td><td><span class="badge badge-composite">Composite</span></td></tr>
+    <tr><td>8–32</td><td>…</td><td>All known to be composite</td><td><span class="badge badge-composite">Composite</span></td></tr>
+    <tr><td>33+</td><td>…</td><td>Status of most is unknown</td><td><span class="badge badge-unknown">Unknown</span></td></tr>
+  </tbody>
+</table>
+
+<p>The conjecture today has essentially reversed: most number theorists suspect there are only finitely many Fermat primes — perhaps exactly five — though no proof of this exists. The question remains wide open and is one of the oldest unsolved problems in mathematics.</p>
+
+<!-- ═══════════════════════════════════ -->
+<h2>Wilson's theorem — a perfect characterisation</h2>
+
+<p>Where Fermat's formula fails as a prime generator, Wilson's theorem succeeds as a prime <em>detector</em> — beautifully, definitively, and yet impractically. First stated by John Wilson in 1770 and proved by Joseph-Louis Lagrange the same year, it gives a necessary and sufficient condition for primality expressed entirely through factorials.</p>
+
+<div class="theorem-card" data-label="Theorem">
+  <span class="th-name">Wilson's Theorem (1770)</span>
+  <code class="th-formula">p is prime  ⟺  (p − 1)! ≡ −1 (mod p)</code>
+  <p>A natural number p > 1 is prime if and only if (p − 1)! + 1 is divisible by p. Equivalently, (p − 1)! leaves remainder p − 1 when divided by p.</p>
+</div>
+
+<p>The elegance is striking. For p = 5: (5−1)! = 24, and 24 + 1 = 25 = 5 × 5. For p = 7: 6! = 720, and 720 + 1 = 721 = 7 × 103. For p = 11: 10! = 3,628,800, and 3,628,800 + 1 = 3,628,801 = 11 × 329,891. It works perfectly — every time, for every prime.</p>
+
+<h3>Why it is true</h3>
+
+<p>The key insight is about modular inverses. In the integers modulo a prime p, every element from 1 to p−1 has a multiplicative inverse — an element it multiplies with to give 1. Most elements pair up with a distinct inverse: the product of each such pair contributes a factor of 1 to (p−1)!. The only elements that are their own inverse are those satisfying x² ≡ 1 (mod p), which (for prime p) means only x = 1 and x = p−1. So the entire product (p−1)! collapses to 1 × (p−1) ≡ −1 (mod p).</p>
+
+<p>For composite numbers, the argument breaks: if p = ab with 1 < a, b < p, then both a and b appear in the product (p−1)! making it divisible by p, so (p−1)! ≡ 0, not −1, modulo p. The biconditional is tight.</p>
+
+<h3>Why it is impractical</h3>
+
+<p>To test whether a 300-digit number is prime using Wilson's theorem, one would need to compute the factorial of a 300-digit number — a quantity with roughly 10<sup>300</sup> digits. No computer, past, present, or conceivable future, could perform this calculation. Wilson's theorem is mathematically perfect and computationally useless, which is precisely why number theorists love it and engineers ignore it.</p>
+
+<div class="formula-block">
+  <span class="formula-label">Wilson — worked example for p = 13</span>
+  <span class="formula-main">(13 − 1)! = 12! = 479,001,600</span>
+  <span class="formula-note">479,001,600 + 1 = 479,001,601 = 13 × 36,846,277  ✓  so 13 is prime</span>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<h2>Other prime-detecting and prime-generating formulas</h2>
+
+<p>The history of attempts to "formula-tise" the primes is long and largely humbling. But several formulas stand out — either for their theoretical importance, their surprising elegance, or their instructive failures.</p>
+
+<h3>Euler's remarkable quadratic: x² + x + 41</h3>
+
+<p>In 1772, Euler discovered that the polynomial x² + x + 41 produces prime values for every integer x from 0 to 39 — a run of forty consecutive primes. No other simple polynomial is known to match this streak.</p>
+
+<div class="formula-block">
+  <span class="formula-label">Euler's Prime-Rich Polynomial</span>
+  <span class="formula-main">f(x) = x² + x + 41</span>
+  <span class="formula-note">f(0)=41, f(1)=43, f(2)=47, f(3)=53, … f(39)=1601 — all prime. But f(40) = 1681 = 41² — composite.</span>
+</div>
+
+<p>The reason for this behaviour is connected to the theory of <em>imaginary quadratic fields</em> and class numbers — but the magic inevitably breaks. No polynomial with integer coefficients can produce only primes, since substituting x = p (where p is any prime the polynomial generates) makes the result divisible by p.</p>
+
+<h3>The Sieve of Eratosthenes</h3>
+
+<p>Not a formula in the algebraic sense, but an algorithm that has endured for over 2,000 years. To find all primes up to N: list every integer from 2 to N, then repeatedly cross out multiples of each prime you encounter. What remains is the complete set of primes up to N.</p>
+
+<div class="formula-block">
+  <span class="formula-label">Sieve — complexity</span>
+  <span class="formula-main">O(N log log N)</span>
+  <span class="formula-note">Optimal for finding all primes up to N. Still used in practice — segmented versions handle billions efficiently.</span>
+</div>
+
+<h3>Fermat's little theorem — the foundation of primality testing</h3>
+
+<p>Not to be confused with Fermat's Last Theorem or Fermat numbers, Fermat's Little Theorem is among the most practically useful results in all of number theory, and it underlies almost every modern primality test.</p>
+
+<div class="theorem-card" data-label="Theorem">
+  <span class="th-name">Fermat's Little Theorem</span>
+  <code class="th-formula">If p is prime and gcd(a, p) = 1, then  aᵖ⁻¹ ≡ 1 (mod p)</code>
+  <p>Equivalently: for any integer a not divisible by prime p, raising a to the power p − 1 and dividing by p always leaves remainder 1.</p>
+</div>
+
+<p>This gives a fast probabilistic primality test: pick a random a, compute a<sup>p−1</sup> mod p (efficiently, using fast exponentiation), and check if the result is 1. If not, p is definitely composite. If yes, p is <em>probably</em> prime — though so-called Carmichael numbers can fool this test. The Miller–Rabin test, a refinement, is what modern systems actually use.</p>
+
+<h3>The Lucas–Lehmer test for Mersenne primes</h3>
+
+<p>A Mersenne prime is a prime of the form 2<sup>p</sup> − 1 where p itself is prime. The largest known primes are almost always Mersenne primes, found by the distributed computing project GIMPS. The Lucas–Lehmer test determines whether a Mersenne number is prime with remarkable efficiency.</p>
+
+<div class="theorem-card" data-label="Theorem">
+  <span class="th-name">Lucas–Lehmer Primality Test</span>
+  <code class="th-formula">Define s₀ = 4, sₙ = sₙ₋₁² − 2 (mod 2ᵖ − 1).
+Then 2ᵖ − 1 is prime  ⟺  s_{p−2} ≡ 0 (mod 2ᵖ − 1)</code>
+  <p>Requires only p − 2 squarings modulo a Mersenne number. The largest known prime (as of 2024) has over 41 million digits and was found by this method.</p>
+</div>
+
+<h3>The prime counting function and its approximations</h3>
+
+<p>Let π(N) denote the number of primes ≤ N. The Prime Number Theorem establishes the asymptotic behaviour, but sharper approximations exist:</p>
+
+<div class="theorem-card" data-label="Approximations">
+  <span class="th-name">Prime Number Theorem &amp; Refinements</span>
+  <code class="th-formula">π(N) ~ N / ln(N)          [PNT, Hadamard & de la Vallée Poussin, 1896]
+π(N) ~ Li(N) = ∫₂ᴺ dt / ln(t)   [logarithmic integral, sharper]
+π(N) = Li(N) + O(√N · ln N)      [assuming Riemann Hypothesis]</code>
+  <p>The logarithmic integral Li(N) outperforms N/ln(N) by a full order of magnitude. The Riemann Hypothesis, if proved, would give the tightest known error bound.</p>
+</div>
+
+<h3>The n-th prime approximation</h3>
+
+<p>Inverting the prime counting function, we can approximate the n-th prime p<sub>n</sub>:</p>
+
+<div class="formula-block">
+  <span class="formula-label">Approximation of the n-th prime</span>
+  <span class="formula-main">pₙ ≈ n · ln(n) + n · ln(ln(n)) − n</span>
+  <span class="formula-note">For n = 1000: p₁₀₀₀ = 7919. This formula gives ≈ 7909. Error: 0.13%</span>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<h2>The Riemann hypothesis — primes in the complex plane</h2>
+
+<p>All of the approximations above carry an implicit error term — a gap between formula and reality. The deepest question in prime theory is: exactly how large can that gap be? Bernhard Riemann, in his single 1859 paper on the distribution of primes, connected this question to the zeros of a function of a complex variable.</p>
+
+<div class="formula-block">
+  <span class="formula-label">The Riemann Zeta Function</span>
+  <span class="formula-main">ζ(s) = Σₙ₌₁^∞ 1/nˢ = ∏ₚ (1 − p⁻ˢ)⁻¹</span>
+  <span class="formula-note">The product on the right (the Euler product) runs over all primes p — encoding the entire prime distribution in a single analytic function.</span>
+</div>
+
+<p>The Euler product formula — due to Euler himself, predating Riemann — already reveals the deep connection: ζ(s) can be written as a product over primes, meaning its analytic properties encode arithmetic facts about the primes. Riemann's insight was to study where ζ(s) = 0 in the complex plane. His conjecture, never proved, is that all non-trivial zeros lie on the critical line Re(s) = ½.</p>
+
+<div class="pull-quote">
+  <p>"If we had a proof of the Riemann Hypothesis, we would immediately know the distribution of primes with a precision no computation can match. The proof has eluded every mathematician who has lived since 1859."</p>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<h2>Open conjectures — what we still do not know</h2>
+
+<p>Despite centuries of effort and the most powerful mathematical machinery ever assembled, the primes still withhold their deepest secrets. Several ancient conjectures remain unproved:</p>
+
+<div class="theorem-card" data-label="Open Conjecture">
+  <span class="th-name">Goldbach's conjecture (1742)</span>
+  <code class="th-formula">Every even integer n > 2 is the sum of two primes</code>
+  <p>Verified computationally up to 4 × 10¹⁸. No proof exists. Widely believed to be true.</p>
+</div>
+
+<div class="theorem-card" data-label="Open Conjecture">
+  <span class="th-name">Twin prime conjecture</span>
+  <code class="th-formula">There are infinitely many pairs (p, p+2) both prime</code>
+  <p>Examples: (3,5), (5,7), (11,13), (17,19), (29,31)... Zhang (2013) proved infinitely many pairs separated by at most 246. The gap to 2 remains unbridged.</p>
+</div>
+
+<div class="theorem-card" data-label="Open Conjecture">
+  <span class="th-name">Are there infinitely many Fermat primes?</span>
+  <code class="th-formula">F<sub>n</sub> = 2<sup>2<sup>n</sup></sup> + 1  prime for infinitely many n?</code>
+  <p>Suspected answer: no. Only F₀ through F₄ are known prime. No proof of finiteness or infinitude exists.</p>
+</div>
+
+<div class="section-ornament">· · ·</div>
+
+<!-- ═══════════════════════════════════ -->
+<h2>Primes through the lens of AI</h2>
+
+<p>As a software and AI engineer, I find a particular resonance in the way prime numbers illuminate the limits of pattern recognition. Modern machine learning systems excel at identifying statistical regularities in data — yet the primes, while not random, are irregular enough that no neural network has discovered a closed-form expression for the n-th prime. The sequence passes standard tests of randomness in many respects, yet it is completely deterministic and structured.</p>
+
+<p>Recent work has applied deep learning to questions in analytic number theory — notably DeepMind's collaboration with mathematicians to discover new connections in the statistics of L-functions. The results suggest AI may help illuminate relationships humans have missed, not by replacing proof but by generating hypotheses worth pursuing. Fermat generated hypotheses; Euler refuted them. That interplay — conjecture, test, refutation, refinement — is something machines are beginning to participate in meaningfully.</p>
+
+<p>The primes remain the purest stress test for any reasoning system: simple to define, impossible to fully tame, and generous enough in their mysteries to keep mathematicians and engineers alike occupied for centuries yet to come.</p>
+
+<footer>
+  <p><strong>Mohamed Ezer Bouzouraa</strong> is a Software &amp; AI Engineer. This article is part of an ongoing series on mathematics and computation.</p>
+  <p style="margin-top:0.8rem;">References: Fermat (1640); Euler (1732, 1772); Wilson (1770); Lagrange (1770); Riemann (1859); Hadamard &amp; de la Vallée Poussin (1896); Lucas–Lehmer (1930); Hardy &amp; Wright, <em>An Introduction to the Theory of Numbers</em>; Zhang (2013); Maynard (2014).</p>
+</footer>
+
+</article>
+</div>
+
+</body>
+</html>
